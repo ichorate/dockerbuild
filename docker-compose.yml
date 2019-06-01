@@ -1,0 +1,35 @@
+version: "3.7"
+
+services:
+  builder:
+    build: .
+    image: dockerbuilder
+
+  basedep:
+      build: ./basedep
+      image: basedep
+
+  codeserver:
+      build: code-server
+      image: codeserver
+      ports:
+        - "8443:8443"
+      command: code-server --allow-http --no-auth
+
+  lapy:
+      build: ./lapy
+      ports:
+        - "8444:8444"
+
+  app:
+      build: ./app
+      image: app
+      volumes:
+        - type: bind
+          source: ./app/src
+          target: /home/coder/project
+      ports:
+        - "8443:8443"
+
+volumes:
+  data-volume:
